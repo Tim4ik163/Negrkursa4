@@ -1,0 +1,8 @@
+<!-- res/drawable/rounded_play_button_pressed.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">  <!-- Change to 'rectangle' for rectangular with rounded corners -->
+    <solid android:color="#1976D2" />  <!-- Slightly darker Blue -->
+    <size
+        android:width="80dp"
+        android:height="80dp" /> <!-- Adjust size as needed -->
+</shape>

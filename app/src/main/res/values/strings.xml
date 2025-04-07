@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Negrs kursack</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+        <string name="back_button_description">Назад</string>
+        <string name="rewind_button_description">Перемотать назад</string>
+        <string name="pause_button_description">Пауза</string>
+        <string name="forward_button_description">Перемотать вперед</string>
+        <string name="close_button_description">Закрыть</string>
+        <string name="play_button_description">Forward</string>
+</resources>
