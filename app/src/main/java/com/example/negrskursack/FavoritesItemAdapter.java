@@ -33,9 +33,8 @@ public class FavoritesItemAdapter extends RecyclerView.Adapter<FavoritesItemAdap
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, MainActivity.class);
-            intent.putExtra("music_resource_id", music.getMp3ResourceId());
-            intent.putExtra("music_title", music.getTitle());
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); // Используйте этот флаг
+            intent.putExtra("selected_music_id", music.getId());
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             context.startActivity(intent);
         });
     }

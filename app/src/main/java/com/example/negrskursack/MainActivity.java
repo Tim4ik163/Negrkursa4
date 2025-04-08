@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         setupBottomBar();
         initDatabase();
         setupSeekBar();
+        handleIncomingIntent();
 
         IntentFilter filter = new IntentFilter(MusicService.ACTION_UPDATE);
         LocalBroadcastManager.getInstance(this).registerReceiver(musicUpdateReceiver, filter);
@@ -81,13 +82,6 @@ public class MainActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.POST_NOTIFICATIONS},
                     REQUEST_CODE_POST_NOTIFICATIONS
             );
-        }
-
-        // Получаем данные о выбранном треке
-        int selectedMusicId = getIntent().getIntExtra("selected_music_id", -1);
-        if (selectedMusicId != -1) {
-            currentTrackIndex = getTrackIndexById(selectedMusicId);
-            playCurrentTrack();
         }
     }
 
@@ -107,6 +101,20 @@ public class MainActivity extends AppCompatActivity {
 
         musicNote2 = findViewById(R.id.music_note_2);
         heartIconBottom = findViewById(R.id.heart_icon);
+    }
+
+    private void handleIncomingIntent() {
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("selected_music_id")) {
+            int selectedId = intent.getIntExtra("selected_music_id", -1);
+            if (selectedId != -1) {
+                currentTrackIndex = getTrackIndexById(selectedId);
+                if (isPlaying) {
+                    pauseMusic();
+                }
+                playCurrentTrack();
+            }
+        }
     }
 
     private void setupButtons() {
@@ -172,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("music_resource_id", currentMusic.getMp3ResourceId());
         startService(intent);
         playPauseBtn.setImageResource(R.drawable.ic_pause);
+        isPlaying = true;
     }
 
     private void pauseMusic() {
@@ -179,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         intent.setAction(MusicService.ACTION_PAUSE);
         startService(intent);
         playPauseBtn.setImageResource(R.drawable.ic_play);
+        isPlaying = false;
     }
 
     private void playNextTrack() {
@@ -268,7 +278,14 @@ public class MainActivity extends AppCompatActivity {
                 return i;
             }
         }
-        return 0; // Возвращаем первый трек, если не найден
+        return 0;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleIncomingIntent();
     }
 
     @Override
