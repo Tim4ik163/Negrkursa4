@@ -128,4 +128,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return musicList;
     }
+
+    // Новый метод для добавления трека в избранное
+    public boolean addToFavorites(Music music) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_IS_FAVORITE, 1);
+
+        // Проверяем, не добавлен ли трек уже в избранное
+        Cursor cursor = db.query(TABLE_MUSIC, null, COLUMN_ID + " = ? AND " + COLUMN_IS_FAVORITE + " = 1",
+                new String[]{String.valueOf(music.getId())}, null, null, null);
+
+        if (cursor.getCount() > 0) {
+            cursor.close();
+            return false; // Трек уже в избранном
+        }
+        cursor.close();
+
+        int rowsAffected = db.update(TABLE_MUSIC, values, COLUMN_ID + " = ?", new String[]{String.valueOf(music.getId())});
+        db.close();
+        return rowsAffected > 0;
+    }
 }

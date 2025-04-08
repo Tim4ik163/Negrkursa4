@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/albumArt"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="13dp"
         android:gravity="center"
         android:text="Song Title"
         android:textColor="@color/black"
@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/songTitle"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="1dp"
         android:gravity="center"
         android:text="Artist Name"
         android:textColor="@color/black"
@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/playerControls"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="39dp"
         android:orientation="horizontal">
 
         <TextView
@@ -72,52 +72,91 @@
             android:textSize="14sp" />
     </LinearLayout>
 
+    <!-- Bottom Bar -->
+
     <LinearLayout
         android:id="@+id/playerControls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="96dp"
         android:gravity="center"
         android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/empty"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription=""
+             />
 
 
-
-        <Button
+        <ImageButton
             android:id="@+id/prevBtn"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:layout_marginEnd="20dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_skip_previous"
-            app:tint="@color/black" />
+            android:src="@drawable/ic_skip_previous" />
 
-        <Button
+        <ImageButton
             android:id="@+id/playPauseBtn"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_play"
-            app:tint="@color/black" />
+            android:contentDescription="Play/Pause button"
+            android:src="@drawable/ic_play" />
 
-        <Button
+        <ImageButton
             android:id="@+id/nextBtn"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:layout_marginStart="20dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_skip_next"
-            app:tint="@color/black" />
+            android:src="@drawable/ic_skip_next" />
 
         <Button
             android:id="@+id/likeButton"
-            android:layout_width="42dp"
+            android:layout_width="40dp"
             android:layout_height="82dp"
-            android:layout_margin="16dp"
+            android:layout_margin="10dp"
             android:background="?attr/selectableItemBackground"
             android:drawableLeft="@drawable/like_button"
             android:padding="10dp"
             android:text="Like"
             android:tint="@color/black" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:padding="16dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/music_note_1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_music_note"
+            android:layout_weight="1"
+            android:gravity="start"/>
+
+        <ImageView
+            android:id="@+id/music_note_2"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_music_note2"
+            android:gravity="center"/>
+
+        <ImageView
+            android:id="@+id/heart_icon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/like_button"
+            android:layout_weight="1"
+            android:gravity="end"/>
+    </LinearLayout>
+
 </RelativeLayout>

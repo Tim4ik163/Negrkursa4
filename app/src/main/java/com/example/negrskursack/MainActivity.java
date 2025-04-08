@@ -1,6 +1,7 @@
 package com.example.negrskursack;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -26,8 +28,10 @@ public class MainActivity extends AppCompatActivity {
     private List<Music> musicList;
     private int currentTrackIndex = 0;
     private Handler seekBarHandler;
-    private Button playPauseBtn, prevBtn, nextBtn;
+    private ImageButton playPauseBtn, prevBtn, nextBtn;
+    private Button likeButton;
     private boolean isPlaying = false;
+    private ImageView musicNote2, heartIconBottom;
     private static final int REQUEST_CODE_POST_NOTIFICATIONS = 1;
 
     private final Runnable seekBarUpdater = new Runnable() {
@@ -65,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         seekBarHandler = new Handler();
         initViews();
         setupButtons();
+        setupBottomBar();
         initDatabase();
         setupSeekBar();
 
@@ -77,8 +82,16 @@ public class MainActivity extends AppCompatActivity {
                     REQUEST_CODE_POST_NOTIFICATIONS
             );
         }
+
+        // Получаем данные о выбранном треке
+        int selectedMusicId = getIntent().getIntExtra("selected_music_id", -1);
+        if (selectedMusicId != -1) {
+            currentTrackIndex = getTrackIndexById(selectedMusicId);
+            playCurrentTrack();
+        }
     }
 
+    @SuppressLint("WrongViewCast")
     private void initViews() {
         seekBar = findViewById(R.id.seekBar);
         albumArt = findViewById(R.id.albumArt);
@@ -90,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
         playPauseBtn = findViewById(R.id.playPauseBtn);
         prevBtn = findViewById(R.id.prevBtn);
         nextBtn = findViewById(R.id.nextBtn);
+        likeButton = findViewById(R.id.likeButton);
+
+        musicNote2 = findViewById(R.id.music_note_2);
+        heartIconBottom = findViewById(R.id.heart_icon);
     }
 
     private void setupButtons() {
@@ -103,6 +120,30 @@ public class MainActivity extends AppCompatActivity {
 
         prevBtn.setOnClickListener(v -> playPreviousTrack());
         nextBtn.setOnClickListener(v -> playNextTrack());
+
+        likeButton.setOnClickListener(v -> {
+            if (!musicList.isEmpty()) {
+                Music currentMusic = musicList.get(currentTrackIndex);
+                boolean added = dbHelper.addToFavorites(currentMusic);
+                if (added) {
+                    Toast.makeText(MainActivity.this, "Добавлено в избранное", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Трек уже в избранном", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void setupBottomBar() {
+        musicNote2.setOnClickListener(v -> {
+            Intent listIntent = new Intent(MainActivity.this, ListActivity.class);
+            startActivity(listIntent);
+        });
+
+        heartIconBottom.setOnClickListener(v -> {
+            Intent favoritesIntent = new Intent(MainActivity.this, FavoritesActivity.class);
+            startActivity(favoritesIntent);
+        });
     }
 
     private void initDatabase() {
@@ -130,12 +171,14 @@ public class MainActivity extends AppCompatActivity {
         intent.setAction(MusicService.ACTION_PLAY);
         intent.putExtra("music_resource_id", currentMusic.getMp3ResourceId());
         startService(intent);
+        playPauseBtn.setImageResource(R.drawable.ic_pause);
     }
 
     private void pauseMusic() {
         Intent intent = new Intent(this, MusicService.class);
         intent.setAction(MusicService.ACTION_PAUSE);
         startService(intent);
+        playPauseBtn.setImageResource(R.drawable.ic_play);
     }
 
     private void playNextTrack() {
@@ -179,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
     private void updatePlayerUI(boolean playing, int progress, int duration) {
         runOnUiThread(() -> {
             isPlaying = playing;
-            playPauseBtn.setText(playing ? "Pause" : "Play");
+            playPauseBtn.setImageResource(playing ? R.drawable.ic_pause : R.drawable.ic_play);
 
             if (duration > 0) {
                 if (seekBar.getMax() != duration) {
@@ -217,6 +260,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void stopSeekBarUpdates() {
         seekBarHandler.removeCallbacks(seekBarUpdater);
+    }
+
+    private int getTrackIndexById(int id) {
+        for (int i = 0; i < musicList.size(); i++) {
+            if (musicList.get(i).getId() == id) {
+                return i;
+            }
+        }
+        return 0; // Возвращаем первый трек, если не найден
     }
 
     @Override

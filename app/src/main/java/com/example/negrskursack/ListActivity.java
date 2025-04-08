@@ -46,5 +46,14 @@ public class ListActivity extends AppCompatActivity {
         List<Music> musicList = dbHelper.getAllMusic();
         musicAdapter = new MusicAdapter(this, musicList);
         recyclerView.setAdapter(musicAdapter);
+
+        musicAdapter.setOnItemClickListener(new MusicAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Music music) {
+                Intent intent = new Intent(ListActivity.this, MainActivity.class);
+                intent.putExtra("selected_music_id", music.getId()); // Передаем ID трека
+                startActivity(intent);
+            }
+        });
     }
 }

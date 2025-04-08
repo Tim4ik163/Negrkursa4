@@ -68,25 +68,25 @@ android:gravity="center">
 
 <ImageView
     android:id="@+id/music_note_1"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="35dp"
+    android:layout_height="35dp"
     android:src="@drawable/ic_music_note"
     android:layout_weight="1"
     android:gravity="start"/>
 
 <ImageView
     android:id="@+id/music_note_2"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="35dp"
+    android:layout_height="35dp"
     android:layout_weight="1"
     android:src="@drawable/ic_music_note2"
     android:gravity="center"/>
 
 <ImageView
     android:id="@+id/heart_icon"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/ic_heart"
+    android:layout_width="35dp"
+    android:layout_height="35dp"
+    android:src="@drawable/like_button"
     android:layout_weight="1"
     android:gravity="end"/>
 </LinearLayout>

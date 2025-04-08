@@ -13,10 +13,21 @@ import java.util.List;
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> {
     private List<Music> musicList;
     private Context context;
+    private OnItemClickListener listener; // Интерфейс для обработки кликов
 
     public MusicAdapter(Context context, List<Music> musicList) {
         this.context = context;
         this.musicList = musicList;
+    }
+
+    // Интерфейс для обработки кликов
+    public interface OnItemClickListener {
+        void onItemClick(Music music);
+    }
+
+    // Метод для установки слушателя кликов
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -33,11 +44,9 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder> 
         holder.titleTextView.setText(music.getTitle());
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.putExtra("music_title", music.getTitle());
-            intent.putExtra("music_resource_id", music.getMp3ResourceId());
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            context.startActivity(intent);
+            if (listener != null) {
+                listener.onItemClick(music); // Вызываем метод интерфейса
+            }
         });
     }
 
